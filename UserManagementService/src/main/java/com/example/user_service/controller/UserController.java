@@ -1,42 +1,54 @@
 package com.example.user_service.controller;
 
-
-import com.example.user_service.model.User;
-import com.example.user_service.service.JWTService;
+import com.example.user_service.dto.*;
 import com.example.user_service.service.UserService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import java.net.URI;
+import java.security.Principal;
 
 @RestController
-@RequestMapping("/user")
-//@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final RestTemplate restTemplate;
 
-    @Autowired
-    private JWTService jwtService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+        this.restTemplate = new RestTemplate(); // For redirecting to admin server
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(userService.register(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+        if (request.getUsername().equals("admin") && request.getPassword().equals("admin123")) {
+            // Redirect to admin server
+            String response = restTemplate.postForObject("http://localhost:8085/admin/login", request, String.class);
+            return ResponseEntity.ok("Redirected to admin service: " + response);
+        }
+        return ResponseEntity.ok(userService.login(request));
+    }
 
     @GetMapping("/profile")
-    public ResponseEntity<User> getUserProfile(HttpServletRequest request) {
-        String token = userService.extractToken(request);
-        if (token == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        String email = jwtService.extractUsername(token); // extracting email
-        User user = userService.getUserByEmail(email);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<ProfileResponse> profile(Principal principal) {
+        return ResponseEntity.ok(userService.getProfile(principal.getName()));
     }
 
-    @PutMapping("/update-profile/{email}")
-    public ResponseEntity<String> updateUserProfile(@PathVariable String email, @RequestBody User updatedUser) {
-        User user = userService.updateUser(email, updatedUser);
-        return ResponseEntity.ok("Updated successdully !");
+    @PutMapping("/profile")
+    public ResponseEntity<String> updateProfile(@RequestBody UpdateProfileRequest request, Principal principal) {
+        return ResponseEntity.ok(userService.updateProfile(principal.getName(), request));
+    }
+
+    @PutMapping("/update-password")
+    public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest request, Principal principal) {
+        return ResponseEntity.ok(userService.updatePassword(principal.getName(), request));
     }
 }
+
