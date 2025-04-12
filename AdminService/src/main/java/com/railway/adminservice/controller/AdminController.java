@@ -13,18 +13,19 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @PostMapping("/add/train")
-    public Train addTrain(@RequestBody Train train){
-        return adminService.addTrain(train);
+    @PostMapping("/add")
+    public ResponseEntity<Train> addTrain(@RequestBody Train train){
+        adminService.addTrain(train);
+        return ResponseEntity.ok(train);
     }
 
-    @DeleteMapping("/delete/train")
+    @DeleteMapping("/delete/train/{pnr}")
     public ResponseEntity<String> deleteTrain(@PathVariable String pnr){
         adminService.deleteTrain(pnr);
         return ResponseEntity.ok("Train deleted successfully!");
     }
 
-    @PutMapping("/update/train")
+    @PutMapping("/update/train/{pnr}")
     public ResponseEntity<Train> updateTrainDetails(@PathVariable String pnr, @RequestBody Train train){
         adminService.updateTrain(pnr,train);
 

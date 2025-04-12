@@ -1,45 +1,50 @@
 package com.railway.traininformationservice.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-@Data
 @Entity
 @Table(name = "trains")
-@Getter
-@Setter
 public class Train {
     @Id
     @Column(nullable = false, unique = true)
     private String pnr; // PNR number as the unique identifier
 
-    @NotNull
+    @Column(nullable = false)
     private String name;
 
-    @NotNull
+    @Column(nullable = false)
+    private int seatCapacity;
+
+    @Column(nullable = false)
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(@NotNull double price) {
+    @Column(nullable = false)
+    public int getSeatCapacity() {
+        return seatCapacity;
+    }
+
+    public void setSeatCapacity(int seatCapacity) {
+        this.seatCapacity = seatCapacity;
+    }
+
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    @NotNull
+    @Column(nullable = false)
     public double price;
 
-    public @NotNull String getSource() {
+    public String getSource() {
         return source;
     }
 
-    public void setSource(@NotNull String source) {
+    public void setSource(String source) {
         this.source = source;
     }
 
-    public @NotNull String getName() {
+    public String getName() {
         return name;
     }
 
@@ -47,43 +52,43 @@ public class Train {
         return pnr;
     }
 
-    public void setName(@NotNull String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public @NotNull String getDestination() {
+    public String getDestination() {
         return destination;
     }
 
-    public void setDestination(@NotNull String destination) {
+    public void setDestination(String destination) {
         this.destination = destination;
     }
 
-    public @NotNull String getSchedule() {
+    public String getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(@NotNull String schedule) {
+    public void setSchedule(String schedule) {
         this.schedule = schedule;
     }
 
-    public @NotNull String getTrainType() {
+    public String getTrainType() {
         return trainType;
     }
 
-    public void setTrainType(@NotNull String trainType) {
+    public void setTrainType(String trainType) {
         this.trainType = trainType;
     }
 
-    @NotNull
+    @Column(nullable = false)
     private String source;
 
-    @NotNull
+    @Column(nullable = false)
     private String destination;
 
-    @NotNull
-    private String schedule; // e.g., "10:00 AM - 2:00 PM"
+    @Column(nullable = false)
+    private String schedule;
 
-    @NotNull
-    private String trainType; // e.g., "Express", "Local"
+    @Column(nullable = false)
+    private String trainType;
 }

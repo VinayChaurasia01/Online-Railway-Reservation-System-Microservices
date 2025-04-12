@@ -9,4 +9,8 @@ public interface ReservationRepository extends JpaRepository<Reservation , Long>
 
     Reservation findByPassengerId(Long passengerId);
 
+    long countByBookingDate(String bookingDate);
+
+    long countByPnrNumber(String pnrNumber);
+
 }

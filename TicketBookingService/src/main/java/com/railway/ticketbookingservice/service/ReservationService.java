@@ -1,5 +1,7 @@
 package com.railway.ticketbookingservice.service;
 
+import com.railway.notificationservice.model.NotificationRequest;
+import com.railway.ticketbookingservice.client.NotificationClient;
 import com.railway.ticketbookingservice.client.TrainInformationClient;
 import com.railway.ticketbookingservice.model.Reservation;
 import com.railway.ticketbookingservice.repo.ReservationRepository;
@@ -16,8 +18,13 @@ public class ReservationService {
     @Autowired
     private TrainInformationClient trainInformationClient;
 
+    @Autowired
+    private NotificationClient notificationClient;
+
 
     Train train = new Train();
+
+    NotificationRequest notification = new NotificationRequest();
 
     public Reservation createReservation(String pnr ,Reservation reservation){
 
@@ -31,6 +38,13 @@ public class ReservationService {
 
 
         reservationRepository.save(reservation);
+
+        notification.setEmail(reservation.getEmail());
+        notification.setPassengerName(reservation.getPassengerName());
+        notification.setPnrNumber(reservation.getPnrNumber());
+
+        notificationClient.sendBookingConfirmation(notification);
+
         return reservation;
     }
 
@@ -56,5 +70,25 @@ public class ReservationService {
     public double getAmount(String pnr){
         Train train = trainInformationClient.getTrainByPnr(pnr);
         return train.getPrice();
+    }
+
+    public Long isAvailable(String pnr) {
+        // Fetch train details using PNR
+        train = trainInformationClient.getTrainByPnr(pnr);
+
+        // Count the number of reservations for the given PNR
+        long bookedSeats = reservationRepository.countByPnrNumber(pnr);
+
+        boolean isAvailable = bookedSeats < train.getSeatCapacity();
+
+        if(!isAvailable){
+            throw new RuntimeException("Seats not available!");
+        }
+        return (train.getSeatCapacity()-bookedSeats);
+    }
+
+    public long getBookingCountForDay(String bookingDate) {
+        // Count reservations for the given booking date
+        return reservationRepository.countByBookingDate(bookingDate);
     }
 }

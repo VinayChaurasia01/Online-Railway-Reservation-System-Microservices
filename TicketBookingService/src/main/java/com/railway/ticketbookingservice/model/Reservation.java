@@ -39,7 +39,18 @@ public class Reservation {
     @Column(nullable = false)
     private String bookingDate;
 
+    @Column(nullable = false)
+    private String email;
+
     // Getters and Setters
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getBookingDate() {
         return bookingDate;

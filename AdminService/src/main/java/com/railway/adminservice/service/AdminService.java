@@ -35,5 +35,4 @@ public class AdminService {
         List<Train> trains = trainInfoClient.getAllTrains();
         return trains;
     }
-
 }

@@ -10,24 +10,25 @@ import java.util.List;
 @FeignClient(name = "TRAININFORMATIONSERVICE")
 public interface TrainInfoClient {
 
-    @PutMapping("/trains/{pnr}")
+    @PutMapping("/trains/update/{pnr}")
     public ResponseEntity<Train> updateTrain(@PathVariable String pnr, @RequestBody Train trainDetails);
 
-    @DeleteMapping("/trains/{pnr}")
+    @DeleteMapping("/trains/delete/{pnr}")
     public ResponseEntity<Void> deleteTrain(@PathVariable String pnr);
 
-    @GetMapping("/trains/search/name/{name}")
-    public List<Train> searchTrainsByName(@PathVariable String name);
+    /*@GetMapping("/trains/search/name/{name}")
+    public List<Train> searchTrainsByName(@PathVariable String name);*/
 
-    @GetMapping("/trains/search/route")
+    /*@GetMapping("/trains/search/route")
     public List<Train> searchTrainsByRoute(@RequestParam String source, @RequestParam String destination);
-
+*/
     @PostMapping("/trains/add")
     public Train addTrain(@RequestBody Train train);
 
-    @GetMapping
+    @GetMapping("/trains/all")
     public List<Train> getAllTrains();
 
-    @GetMapping("/trains/search/{pnr}")
-    public ResponseEntity<Train> getTrainByPnr(@PathVariable String pnr);
+    /*@GetMapping("/trains/search/{pnr}")
+    public ResponseEntity<Train> getTrainByPnr(@PathVariable String pnr);*/
+
 }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TrainService {
@@ -28,12 +27,14 @@ public class TrainService {
     }
 
     public Train updateTrain(String pnr, Train trainDetails) {
-        Train train = trainRepository.findById(pnr).orElseThrow(() -> new RuntimeException("Train not found"));
+        Train train = trainRepository.findById(pnr).orElseThrow(() -> new RuntimeException("Train not found!"));
         train.setName(trainDetails.getName());
         train.setSource(trainDetails.getSource());
         train.setDestination(trainDetails.getDestination());
         train.setSchedule(trainDetails.getSchedule());
         train.setTrainType(trainDetails.getTrainType());
+        train.setSeatCapacity(trainDetails.getSeatCapacity());
+        train.setPrice(trainDetails.getPrice());
         return trainRepository.save(train);
     }
 

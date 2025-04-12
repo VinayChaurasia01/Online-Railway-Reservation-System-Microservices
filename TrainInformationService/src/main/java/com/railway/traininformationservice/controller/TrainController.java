@@ -21,7 +21,7 @@ public class TrainController {
         return trainService.getAllTrains();
     }
 
-    @GetMapping("search/{pnr}")
+    @GetMapping("/search/{pnr}")
     public ResponseEntity<Train> getTrainByPnr(@PathVariable String pnr) {
         Train train = trainService.getTrainByPnr(pnr);
 
@@ -36,13 +36,13 @@ public class TrainController {
         return trainService.addTrain(train);
     }
 
-    @PutMapping("/delete/{pnr}")
+    @PutMapping("/update/{pnr}")
     public ResponseEntity<Train> updateTrain(@PathVariable String pnr, @RequestBody Train trainDetails) {
         Train updatedTrain = trainService.updateTrain(pnr, trainDetails);
         return ResponseEntity.ok(updatedTrain);
     }
 
-    @DeleteMapping("/{pnr}")
+    @DeleteMapping("/delete/{pnr}")
     public ResponseEntity<Void> deleteTrain(@PathVariable String pnr) {
         trainService.deleteTrain(pnr);
         return ResponseEntity.noContent().build();
