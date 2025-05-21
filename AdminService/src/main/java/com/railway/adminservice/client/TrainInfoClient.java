@@ -7,28 +7,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "TRAININFORMATIONSERVICE")
+@FeignClient(name = "TRAININFORMATIONSERVICE",configuration = TrainInfoClientConfig.class)
 public interface TrainInfoClient {
 
-    @PutMapping("/trains/update/{pnr}")
-    public ResponseEntity<Train> updateTrain(@PathVariable String pnr, @RequestBody Train trainDetails);
+    @PostMapping("/trains/add")
+    Train addTrain(@RequestBody Train train);
 
     @DeleteMapping("/trains/delete/{pnr}")
-    public ResponseEntity<Void> deleteTrain(@PathVariable String pnr);
+    ResponseEntity<Void> deleteTrain(@PathVariable String pnr);
 
-    /*@GetMapping("/trains/search/name/{name}")
-    public List<Train> searchTrainsByName(@PathVariable String name);*/
-
-    /*@GetMapping("/trains/search/route")
-    public List<Train> searchTrainsByRoute(@RequestParam String source, @RequestParam String destination);
-*/
-    @PostMapping("/trains/add")
-    public Train addTrain(@RequestBody Train train);
+    @PutMapping("/trains/update/{pnr}")
+    ResponseEntity<Train> updateTrain(@PathVariable String pnr, @RequestBody Train train);
 
     @GetMapping("/trains/all")
-    public List<Train> getAllTrains();
-
-    /*@GetMapping("/trains/search/{pnr}")
-    public ResponseEntity<Train> getTrainByPnr(@PathVariable String pnr);*/
+    List<Train> getAllTrains();
 
 }

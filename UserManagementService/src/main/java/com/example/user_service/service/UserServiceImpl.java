@@ -85,4 +85,3 @@ public class UserServiceImpl implements UserService {
         return "Password updated successfully!";
     }
 }
-

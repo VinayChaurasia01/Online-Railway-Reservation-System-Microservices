@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -30,5 +32,10 @@ public class AdminController {
         adminService.updateTrain(pnr,train);
 
         return ResponseEntity.ok(train);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Train>> getAllTrains(){
+        return ResponseEntity.ok(adminService.getAllTrains());
     }
 }

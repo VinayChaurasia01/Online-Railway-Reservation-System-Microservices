@@ -1,5 +1,6 @@
 package com.railway.ticketbookingservice.service;
 
+
 import com.railway.notificationservice.model.NotificationRequest;
 import com.railway.ticketbookingservice.client.NotificationClient;
 import com.railway.ticketbookingservice.client.TrainInformationClient;
@@ -42,6 +43,8 @@ public class ReservationService {
         notification.setEmail(reservation.getEmail());
         notification.setPassengerName(reservation.getPassengerName());
         notification.setPnrNumber(reservation.getPnrNumber());
+        notification.setAge(reservation.getPassengerAge());
+        notification.setPassengerId(reservation.getPassengerId());
 
         notificationClient.sendBookingConfirmation(notification);
 
@@ -53,6 +56,14 @@ public class ReservationService {
 
         if(reservation != null){
             reservationRepository.delete(reservation);
+
+            notification.setEmail(reservation.getEmail());
+            notification.setPassengerName(reservation.getPassengerName());
+            notification.setPnrNumber(reservation.getPnrNumber());
+            notification.setAge(reservation.getPassengerAge());
+            notification.setPassengerId(reservation.getPassengerId());
+
+            notificationClient.sendCancellationConfirmation(notification);
             return reservation;
         }
         return null;
